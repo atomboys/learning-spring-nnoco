@@ -12,16 +12,39 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
 		<property name="url" value="jdbc:mysql://127.0.0.1:3306/book_ex"></property>
+		<property name="username" value="test"></property>
+		<property name="password" value="test"></property>
+	</bean>  -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="url" value="jdbc:log4jdbc:mysql://127.0.0.1:3306/book_ex"></property>
 		<property name="username" value="test"></property>
 		<property name="password" value="test"></property>
 	</bean>
 	
 	<!-- SqlSessionFactoryBean -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" depends-on="flyway">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="configLocation" value="classpath:/mybatis-config.xml"/>
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
+	</bean>
+	
+	<!-- SqlSessionTemplate -->
+	<!-- SqlSessionTemplate는 MyBatis의 SqlSession 인터페이스를 구현한클래스로 기본적인 트랜잭션의 관리나
+	쓰레드 처리의 안정성 등을 보장해주고 데이터베이스의 연결과 종료를 책임진다. -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
+	
+	<!-- 컴포넌트 스캔 -->
+	<context:component-scan base-package="org.zerock.persistence"/>
+	
+	<!-- Flyway Spring Integration -->
+	<bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="locations" value="classpath:/flyway/sql/"></property>
 	</bean>
 </beans>
