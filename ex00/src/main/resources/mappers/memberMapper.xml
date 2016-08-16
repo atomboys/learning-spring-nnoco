@@ -7,4 +7,30 @@
 	<select id="getTime" resultType="string">
 		select now()
 	</select>
+	
+	<insert id="create">
+		insert into tbl_member (userid, userpw, username, email)
+		values (#{userid}, #{userpw}, #{username}, #{email})
+	</insert>
+	
+	<select id="read" resultType="org.zerock.web.domain.MemberVO">
+		select
+			userid, userpw, username, email
+		from
+			tbl_member
+		where
+			userid = #{userid}
+	</select>
+	
+	<select id="readWithPW" resultType="org.zerock.web.domain.MemberVO">
+		select
+			userid, userpw, username, email
+		from
+			tbl_member
+		where
+			userid = #{userid}
+			and
+			userpw = #{userpw}
+			
+	</select>
 </mapper>
