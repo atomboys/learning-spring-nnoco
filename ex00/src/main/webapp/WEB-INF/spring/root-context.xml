@@ -32,6 +32,8 @@
 		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
 	</bean>
 	
+	<mybatis-spring:scan base-package="org.zerock.mapper"/>
+	
 	<!-- SqlSessionTemplate -->
 	<!-- SqlSessionTemplate는 MyBatis의 SqlSession 인터페이스를 구현한클래스로 기본적인 트랜잭션의 관리나
 	쓰레드 처리의 안정성 등을 보장해주고 데이터베이스의 연결과 종료를 책임진다. -->

@@ -8,5 +8,4 @@ public interface MemberMapper {
 	public MemberVO read(String userid) throws Exception;
 	public MemberVO readWithPW(@Param("userid") String userId, @Param("userpw") String userpw) throws Exception;
 	public String getTime() throws Exception;
-	
 }
